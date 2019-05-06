@@ -1,0 +1,41 @@
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: "compression-service"
+  namespace: "default"
+  labels:
+    app: "compression-service"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "compression-service"
+  template:
+    metadata:
+      labels:
+        app: "compression-service"
+    spec:
+      containers:
+        - name: "compression-service-latest"
+          image: "gcr.io/licenta-diana/compression-service"
+          imagePullPolicy: "Always"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "compression-service-hpa"
+  namespace: "default"
+  labels:
+    app: "compression-service"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "compression-service"
+    apiVersion: "apps/v1beta1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        targetAverageUtilization: 80
