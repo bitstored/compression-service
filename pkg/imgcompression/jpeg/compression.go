@@ -1,4 +1,4 @@
-package imgcompression
+package jpeg
 
 import (
 	"math"
@@ -254,26 +254,4 @@ func applyCosineAndEncode(in [][]YCbCrPixel) []int8 {
 		}
 	}
 	return out
-}
-func compressImage(in [][]RGBPixel) ([]int8, *errors.Err) {
-
-	out, err := toYCbCr(in)
-	if err != nil {
-		return nil, err
-	}
-
-	out, err = resize(out, int(math.Ceil(float64(len(in))/8*8)), int(math.Ceil(float64(len(in[0]))/8*8)))
-	if err != nil {
-		return nil, err
-	}
-
-	out = toSigned(out)
-	bytes := applyCosineAndEncode(out)
-	// real size
-	is := int2Int8Array(len(in))
-	bytes = append(bytes, is...)
-	is = int2Int8Array(len(in[0]))
-	bytes = append(bytes, is...)
-
-	return bytes, nil
 }

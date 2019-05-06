@@ -1,4 +1,4 @@
-package imgcompression
+package jpeg
 
 import (
 	"github.com/stretchr/testify/require"

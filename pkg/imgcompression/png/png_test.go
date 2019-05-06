@@ -1,4 +1,4 @@
-package service
+package png
 
 import (
 	"context"
@@ -7,6 +7,8 @@ import (
 	"image/color"
 	"image/png"
 	"testing"
+
+	"github.com/bitstored/compression-service/pkg/imgcompression"
 )
 
 func TestCompressImage(t *testing.T) {
@@ -17,7 +19,9 @@ func TestCompressImage(t *testing.T) {
 			img.Set(i, j, color.RGBA{uint8(i), uint8(j), uint8(i), 255})
 		}
 	}
-	s := NewCompressionService()
+
+	var s imgcompression.Compressor = NewCompressor()
+
 	ts := []struct {
 		Name  string
 		Level png.CompressionLevel
@@ -47,12 +51,12 @@ func TestCompressImage(t *testing.T) {
 	}
 	for _, tc := range ts {
 		t.Run(tc.Name, func(t *testing.T) {
-			bytes, err := s.CompressImage(context.Background(), tc.Image, tc.Level)
-			require.NoError(t, err)
+			bytes, err := s.Compress(context.Background(), tc.Image, tc.Level)
+			require.NoError(t, err.Error())
 			tc.Bytes = bytes
 			require.True(t, len(bytes) < 4*bounds.Dy()*bounds.Dx())
-			imag, err := s.DecompressImage(context.Background(), tc.Bytes, tc.Level)
-			require.NoError(t, err)
+			imag, err := s.Decompress(context.Background(), tc.Bytes)
+			require.NoError(t, err.Error())
 			for i := 0; i < bounds.Dx(); i++ {
 				for j := 0; j < bounds.Dy(); j++ {
 					t.Run("Test", func(t *testing.T) {

@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package compression_service;
+option go_package="pb";
+
+import "google/api/annotations.proto";
+
+service Compression {
+    rpc CompressImage(CompressImageRequest) returns (CompressImageResponse) {
+        option (google.api.http) = {
+            post: "/compression/api/v1/image/compress"
+        };
+    }
+    rpc DecompressImage(DecompressImageRequest) returns (DecompressImageResponse) {
+        option (google.api.http) = {
+            post: "/compression/api/v1/image/decompress"
+        };
+    }
+    rpc CompressText(CompressTextRequest) returns (CompressTextResponse) {
+        option (google.api.http) = {
+            get: "/compression/api/v1/text/compress"
+        };
+    }
+    rpc DecompressText(DecompressTextRequest) returns (DecompressTextResponse) {
+        option (google.api.http) = {
+            get: "/compression/api/v1/text/decompress"
+        };
+    }
+}
+
+enum CompressionLevel {
+	DefaultCompression  = 0;
+	NoCompression = 1;
+	BestSpeed  = 2;
+	BestCompression = 3;
+}
+enum ImageType {
+	PNG  = 0;
+	JPEG = 1;
+}
+message CompressImageRequest {
+    bytes image= 1;
+    CompressionLevel level = 2;
+    ImageType type = 3;
+}
+message CompressImageResponse {
+    int32 response_code = 1;
+    string response_message = 2;
+    bytes image = 3;
+    string format = 4;
+    CompressionLevel level = 5;
+}
+message DecompressImageRequest {
+    bytes image= 1;
+    CompressionLevel level = 2;
+    ImageType type = 3;
+}
+message DecompressImageResponse {
+    int32 response_code = 1;
+    string response_message = 2;
+    bytes image = 3;
+}
+message CompressTextRequest {
+    bytes text= 1;
+}
+message CompressTextResponse {
+    int32 response_code = 1;
+    string response_message = 2;
+    bytes text = 3;
+}
+message DecompressTextRequest {
+    bytes text= 1;
+}
+message DecompressTextResponse {
+    int32 response_code = 1;
+    string response_message = 2;
+    bytes text = 3;
+}

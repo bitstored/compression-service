@@ -1,4 +1,4 @@
-package imgcompression
+package jpeg
 
 import (
 	"math"
@@ -249,28 +249,6 @@ func decodeEntropyAndApplyCosine(data []int8) ([][]YCbCrPixel, *errors.Err) {
 				}
 			}
 		}
-	}
-	return out, nil
-}
-
-func decompressImage(data []int8) ([][]RGBPixel, *errors.Err) {
-	image, err := decodeEntropyAndApplyCosine(data)
-	if err != nil {
-		return nil, err
-	}
-
-	x := len(data) - 8
-	y := len(data) - 4
-	image, err = resize(image, int8Array2Int(data[x:x+4]), int8Array2Int(data[y:y+4]))
-	if err != nil {
-		return nil, err
-	}
-
-	image = toUnsigned(image)
-
-	out, err := toRGB(image)
-	if err != nil {
-		return nil, err
 	}
 	return out, nil
 }

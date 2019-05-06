@@ -1,12 +1,15 @@
-package imgcompression
+package jpeg
 
 import (
 	"encoding/binary"
 	"github.com/bitstored/compression-service/pkg/errors"
+	"image"
+	"image/color"
 	"math"
 )
 
 const (
+	ratio               = image.YCbCrSubsampleRatio422
 	blockLen            = 8
 	transformationValue = 128
 )
@@ -127,4 +130,32 @@ func int2Int8Array(a int) []int8 {
 		is = append(is, int8(bs[i]))
 	}
 	return is
+}
+
+func image2Array(img image.Image) [][]RGBPixel {
+	b := img.Bounds()
+	out := make([][]RGBPixel, b.Dx())
+	for x := 0; x < b.Dx(); x++ {
+		out[x] = make([]RGBPixel, b.Dy())
+		for y := 0; y < b.Dy(); y++ {
+			r, g, b, _ := img.At(x, y).RGBA()
+			out[x][y].R = int16(r)
+			out[x][y].G = int16(g)
+			out[x][y].B = int16(b)
+		}
+	}
+	return out
+}
+
+func arraytoImage(img [][]RGBPixel) image.Image {
+	out := image.NewNRGBA(image.Rect(0, 0, len(img), len(img[0])))
+
+	for x := 0; x < len(img); x++ {
+		for y := 0; y < len(img[0]); y++ {
+			col := color.RGBA{uint8(img[x][y].R), uint8(img[x][y].G), uint8(img[x][y].B), 255}
+			out.Set(x, y, col)
+		}
+	}
+
+	return out
 }

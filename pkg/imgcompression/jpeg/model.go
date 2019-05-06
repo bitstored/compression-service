@@ -1,4 +1,4 @@
-package imgcompression
+package jpeg
 
 type RGBPixel struct {
 	R int16
