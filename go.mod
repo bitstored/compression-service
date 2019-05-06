@@ -1,7 +1,7 @@
 module github.com/bitstored/compression-service
 
 require (
-	github.com/bitstored/auth-service v0.0.0-20190421213439-fd45c1b44b29
+	github.com/bitstored/auth-service v0.0.0-20190421213439-fd45c1b44b29 // indirect
 	github.com/cenkalti/backoff v2.1.1+incompatible
 	github.com/golang/protobuf v1.3.1
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
