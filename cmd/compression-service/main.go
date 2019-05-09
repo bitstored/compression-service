@@ -106,6 +106,7 @@ func main() {
 			log.Fatalf("Unable to start a http server - %s", err)
 		}
 	}()
+	fmt.Printf("Compression server listening on  %s for gRPC\nCompression server listening on on %s for http\n", *grpcAddr, *httpAddr)
 
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)

@@ -3,6 +3,7 @@ package server
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"image"
@@ -21,6 +22,11 @@ func NewServer(s *service.Service) *Server {
 }
 
 func (s *Server) CompressImage(ctx context.Context, in *pb.CompressImageRequest) (*pb.CompressImageResponse, error) {
+
+	if in.GetImage() == nil || len(in.GetImage()) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "image can't be empty")
+	}
+
 	reader := bytes.NewReader(in.GetImage())
 
 	image, format, err := image.Decode(reader)
@@ -45,6 +51,10 @@ func (s *Server) CompressImage(ctx context.Context, in *pb.CompressImageRequest)
 }
 
 func (s *Server) DecompressImage(ctx context.Context, in *pb.DecompressImageRequest) (*pb.DecompressImageResponse, error) {
+
+	if in.GetImage() == nil || len(in.GetImage()) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "image can't be empty")
+	}
 
 	level := compressionLevel(in.GetLevel())
 	imgType := in.GetType()
@@ -72,6 +82,9 @@ func (s *Server) DecompressImage(ctx context.Context, in *pb.DecompressImageRequ
 func (s *Server) CompressText(ctx context.Context, in *pb.CompressTextRequest) (*pb.CompressTextResponse, error) {
 	level := in.GetLevel()
 
+	if in.GetText() == nil || len(in.GetText()) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "text can't be empty")
+	}
 	out, err := s.Service.CompressText(ctx, in.GetText(), level)
 	if err != nil {
 		return nil, err
@@ -88,6 +101,9 @@ func (s *Server) CompressText(ctx context.Context, in *pb.CompressTextRequest) (
 }
 func (s *Server) DecompressText(ctx context.Context, in *pb.DecompressTextRequest) (*pb.DecompressTextResponse, error) {
 
+	if in.GetText() == nil || len(in.GetText()) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "text can't be empty")
+	}
 	out, err := s.Service.DecompressText(ctx, in.GetText())
 	if err != nil {
 		return nil, err

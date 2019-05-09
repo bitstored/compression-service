@@ -26,6 +26,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/compression_serviceCompressImageRequest"
+            }
+          }
+        ],
         "tags": [
           "Compression"
         ]
@@ -42,13 +52,23 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/compression_serviceDecompressImageRequest"
+            }
+          }
+        ],
         "tags": [
           "Compression"
         ]
       }
     },
     "/compression/api/v1/text/compress": {
-      "get": {
+      "post": {
         "operationId": "CompressText",
         "responses": {
           "200": {
@@ -60,25 +80,12 @@
         },
         "parameters": [
           {
-            "name": "text",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "byte"
-          },
-          {
-            "name": "level",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "DefaultCompression",
-              "NoCompression",
-              "BestSpeed",
-              "BestCompression",
-              "HuffmanOnly"
-            ],
-            "default": "DefaultCompression"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/compression_serviceCompressTextRequest"
+            }
           }
         ],
         "tags": [
@@ -87,7 +94,7 @@
       }
     },
     "/compression/api/v1/text/decompress": {
-      "get": {
+      "post": {
         "operationId": "DecompressText",
         "responses": {
           "200": {
@@ -99,11 +106,12 @@
         },
         "parameters": [
           {
-            "name": "text",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "byte"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/compression_serviceDecompressTextRequest"
+            }
           }
         ],
         "tags": [
@@ -113,6 +121,21 @@
     }
   },
   "definitions": {
+    "compression_serviceCompressImageRequest": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string",
+          "format": "byte"
+        },
+        "level": {
+          "$ref": "#/definitions/compression_serviceCompressionLevel"
+        },
+        "type": {
+          "$ref": "#/definitions/compression_serviceImageType"
+        }
+      }
+    },
     "compression_serviceCompressImageResponse": {
       "type": "object",
       "properties": {
@@ -129,6 +152,18 @@
         },
         "format": {
           "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/compression_serviceCompressionLevel"
+        }
+      }
+    },
+    "compression_serviceCompressTextRequest": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "format": "byte"
         },
         "level": {
           "$ref": "#/definitions/compression_serviceCompressionLevel"
@@ -165,6 +200,21 @@
       ],
       "default": "DefaultCompression"
     },
+    "compression_serviceDecompressImageRequest": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string",
+          "format": "byte"
+        },
+        "level": {
+          "$ref": "#/definitions/compression_serviceCompressionLevel"
+        },
+        "type": {
+          "$ref": "#/definitions/compression_serviceImageType"
+        }
+      }
+    },
     "compression_serviceDecompressImageResponse": {
       "type": "object",
       "properties": {
@@ -176,6 +226,15 @@
           "type": "string"
         },
         "image": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "compression_serviceDecompressTextRequest": {
+      "type": "object",
+      "properties": {
+        "text": {
           "type": "string",
           "format": "byte"
         }

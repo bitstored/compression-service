@@ -9,21 +9,25 @@ service Compression {
     rpc CompressImage(CompressImageRequest) returns (CompressImageResponse) {
         option (google.api.http) = {
             post: "/compression/api/v1/image/compress"
+            body: "*"
         };
     }
     rpc DecompressImage(DecompressImageRequest) returns (DecompressImageResponse) {
         option (google.api.http) = {
             post: "/compression/api/v1/image/decompress"
+            body: "*"
         };
     }
     rpc CompressText(CompressTextRequest) returns (CompressTextResponse) {
         option (google.api.http) = {
-            get: "/compression/api/v1/text/compress"
+            post: "/compression/api/v1/text/compress"
+            body: "*"
         };
     }
     rpc DecompressText(DecompressTextRequest) returns (DecompressTextResponse) {
         option (google.api.http) = {
-            get: "/compression/api/v1/text/decompress"
+            post: "/compression/api/v1/text/decompress"
+            body: "*"
         };
     }
 }
