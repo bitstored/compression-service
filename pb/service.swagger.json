@@ -65,6 +65,20 @@
             "required": false,
             "type": "string",
             "format": "byte"
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DefaultCompression",
+              "NoCompression",
+              "BestSpeed",
+              "BestCompression",
+              "HuffmanOnly"
+            ],
+            "default": "DefaultCompression"
           }
         ],
         "tags": [
@@ -134,6 +148,9 @@
         "text": {
           "type": "string",
           "format": "byte"
+        },
+        "level": {
+          "$ref": "#/definitions/compression_serviceCompressionLevel"
         }
       }
     },
@@ -143,7 +160,8 @@
         "DefaultCompression",
         "NoCompression",
         "BestSpeed",
-        "BestCompression"
+        "BestCompression",
+        "HuffmanOnly"
       ],
       "default": "DefaultCompression"
     },

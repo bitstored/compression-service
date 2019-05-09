@@ -14,14 +14,22 @@ func NewCompressor() *JPEGCompressor {
 	return &JPEGCompressor{}
 }
 
-func (c *JPEGCompressor) Compress(ctx context.Context, in image.Image, level interface{}) ([]int8, *errors.Err) {
+func (c *JPEGCompressor) Compress(ctx context.Context, in image.Image, level interface{}) ([]byte, *errors.Err) {
 	img := image2Array(in)
-	bytes, err := compressImage(img)
+	ints, err := compressImage(img)
+	bytes := make([]byte, 0)
+	for i := range ints {
+		bytes = append(bytes, byte(ints[i]))
+	}
 	return bytes, err
 }
 
-func (c *JPEGCompressor) Decompress(data []int8) (image.Image, *errors.Err) {
-	arr, err := decompressImage(data)
+func (c *JPEGCompressor) Decompress(ctx context.Context, data []byte) (image.Image, *errors.Err) {
+	ints := make([]int8, 0)
+	for i := range data {
+		ints = append(ints, int8(ints[i]))
+	}
+	arr, err := decompressImage(ints)
 	if err != nil {
 		return nil, err
 	}

@@ -7,8 +7,9 @@ import (
 
 	"github.com/bitstored/compression-service/pb"
 	"github.com/bitstored/compression-service/pkg/imgcompression"
-	_ "github.com/bitstored/compression-service/pkg/imgcompression/jpeg"
+	comp_jpeg "github.com/bitstored/compression-service/pkg/imgcompression/jpeg"
 	comp_png "github.com/bitstored/compression-service/pkg/imgcompression/png"
+	"github.com/bitstored/compression-service/pkg/textcompression"
 )
 
 type Service struct {
@@ -24,11 +25,14 @@ func (s *Service) CompressImage(ctx context.Context, img image.Image, level png.
 	if imgType == pb.ImageType_PNG {
 		c = comp_png.NewCompressor()
 	} else {
-		//c = comp_jpeg.NewCompressor()
+		c = comp_jpeg.NewCompressor()
 	}
 	out, err := c.Compress(ctx, img, level)
 
-	return out, err.Error()
+	if err != nil {
+		return nil, err.Error()
+	}
+	return out, nil
 }
 
 func (s *Service) DecompressImage(ctx context.Context, img []byte, level png.CompressionLevel, imgType pb.ImageType) (image.Image, error) {
@@ -37,16 +41,29 @@ func (s *Service) DecompressImage(ctx context.Context, img []byte, level png.Com
 	if imgType == pb.ImageType_PNG {
 		c = comp_png.NewCompressor()
 	} else {
-		//c = comp_jpeg.NewCompressor()
+		c = comp_jpeg.NewCompressor()
 	}
 	out, err := c.Decompress(ctx, img)
-
-	return out, err.Error()
+	if err != nil {
+		return nil, err.Error()
+	}
+	return out, nil
 }
 
-func (s *Service) CompressText(ctx context.Context, text []byte) ([]byte, error) {
-	return nil, nil
+func (s *Service) CompressText(ctx context.Context, text []byte, l pb.CompressionLevel) ([]byte, error) {
+	c := textcompression.NewZlibCompressor()
+	out, err := c.Compress(ctx, text, l)
+	if err != nil {
+		return nil, err.Error()
+	}
+	return out, nil
 }
+
 func (s *Service) DecompressText(ctx context.Context, text []byte) ([]byte, error) {
-	return nil, nil
+	c := textcompression.NewZlibCompressor()
+	out, err := c.Decompress(ctx, text)
+	if err != nil {
+		return nil, err.Error()
+	}
+	return out, nil
 }

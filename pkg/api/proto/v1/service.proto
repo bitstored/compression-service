@@ -32,8 +32,10 @@ enum CompressionLevel {
 	DefaultCompression  = 0;
 	NoCompression = 1;
 	BestSpeed  = 2;
-	BestCompression = 3;
+    BestCompression = 3;
+    HuffmanOnly = 4;
 }
+
 enum ImageType {
 	PNG  = 0;
 	JPEG = 1;
@@ -62,11 +64,13 @@ message DecompressImageResponse {
 }
 message CompressTextRequest {
     bytes text= 1;
+    CompressionLevel level = 2;
 }
 message CompressTextResponse {
     int32 response_code = 1;
     string response_message = 2;
     bytes text = 3;
+    CompressionLevel level = 4;
 }
 message DecompressTextRequest {
     bytes text= 1;

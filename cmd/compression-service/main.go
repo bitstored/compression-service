@@ -32,8 +32,8 @@ const (
 )
 
 var (
-	grpcAddr = flag.String("grpc", "localhost:4001", "gRPC API address")
-	httpAddr = flag.String("http", "localhost:4021", "HTTP API address")
+	grpcAddr = flag.String("grpc", "localhost:4003", "gRPC API address")
+	httpAddr = flag.String("http", "localhost:5003", "HTTP API address")
 	cert     = flag.String("cert", "scripts/localhost.pem", "certificate pathname")
 	certKey  = flag.String("certkey", "scripts/localhost.key", "private key pathname")
 )

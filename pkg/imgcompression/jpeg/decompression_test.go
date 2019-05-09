@@ -172,7 +172,7 @@ func TestDecompressImage(t *testing.T) {
 				require.Error(t, err.Error())
 			} else {
 				require.NoError(t, err.Error())
-				_, err := DecompressImage(rez)
+				_, err := decompressImage(rez)
 				require.NoError(t, err.Error())
 				// for i := 0; i < blockLen; i++ {
 				// 	for j := 0; j < blockLen; j++ {

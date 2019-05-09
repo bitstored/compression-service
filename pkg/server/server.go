@@ -69,9 +69,35 @@ func (s *Server) DecompressImage(ctx context.Context, in *pb.DecompressImageRequ
 	return response, nil
 }
 
-func (s *Server) CompressText(context.Context, *pb.CompressTextRequest) (*pb.CompressTextResponse, error) {
-	return nil, nil
+func (s *Server) CompressText(ctx context.Context, in *pb.CompressTextRequest) (*pb.CompressTextResponse, error) {
+	level := in.GetLevel()
+
+	out, err := s.Service.CompressText(ctx, in.GetText(), level)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := pb.CompressTextResponse{
+		ResponseCode:    200,
+		ResponseMessage: "Text compressed succesfully",
+		Text:            out,
+		Level:           level,
+	}
+
+	return &rsp, nil
 }
-func (s *Server) DecompressText(context.Context, *pb.DecompressTextRequest) (*pb.DecompressTextResponse, error) {
-	return nil, nil
+func (s *Server) DecompressText(ctx context.Context, in *pb.DecompressTextRequest) (*pb.DecompressTextResponse, error) {
+
+	out, err := s.Service.DecompressText(ctx, in.GetText())
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := pb.DecompressTextResponse{
+		ResponseCode:    200,
+		ResponseMessage: "Text decompressed succesfully",
+		Text:            out,
+	}
+
+	return &rsp, nil
 }
