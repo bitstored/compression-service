@@ -10,5 +10,7 @@ RUN apk --update add ca-certificates
 COPY --from=source /home/server/cmd/compression-service/compression-service /home/compression-service
 COPY --from=source /home/server/scripts/localhost.* /home/scripts/
 WORKDIR /home
-EXPOSE 4001
+EXPOSE 4003
+EXPOSE 5003
+
 ENTRYPOINT [ "./compression-service" ]
