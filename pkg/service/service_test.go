@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/bitstored/compression-service/pb"
 	"github.com/stretchr/testify/require"
 	"image"
 	"image/color"
@@ -47,11 +48,11 @@ func TestCompressImage(t *testing.T) {
 	}
 	for _, tc := range ts {
 		t.Run(tc.Name, func(t *testing.T) {
-			bytes, err := s.CompressImage(context.Background(), tc.Image, tc.Level)
+			bytes, err := s.CompressImage(context.Background(), tc.Image, tc.Level, pb.ImageType_PNG)
 			require.NoError(t, err)
 			tc.Bytes = bytes
 			require.True(t, len(bytes) < 4*bounds.Dy()*bounds.Dx())
-			imag, err := s.DecompressImage(context.Background(), tc.Bytes, tc.Level)
+			imag, err := s.DecompressImage(context.Background(), tc.Bytes, tc.Level, pb.ImageType_PNG)
 			require.NoError(t, err)
 			for i := 0; i < bounds.Dx(); i++ {
 				for j := 0; j < bounds.Dy(); j++ {
